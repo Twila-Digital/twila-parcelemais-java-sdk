@@ -31,7 +31,7 @@ Maven:
 
 ```xml
 <dependency>
-    <groupId>twila</groupId>
+    <groupId>br.com.twila</groupId>
     <artifactId>parcelemais</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -40,7 +40,7 @@ Maven:
 Gradle (Kotlin DSL):
 
 ```kotlin
-implementation("twila:parcelemais:1.0.0")
+implementation("br.com.twila:parcelemais:1.0.0")
 ```
 
 > O pacote ainda não foi publicado no Maven Central — veja [CONTRIBUTING.md](CONTRIBUTING.md) para instalar a partir do código-fonte enquanto isso.
