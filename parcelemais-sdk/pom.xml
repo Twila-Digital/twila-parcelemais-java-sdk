@@ -17,6 +17,12 @@
     <description>SDK oficial em Java para a API do Parcele+ — crédito direto ao consumidor (CDC) e parcelamento no momento da compra.</description>
     <url>https://github.com/Twila-Digital/twila-parcelemais-java-sdk</url>
 
+    <scm>
+        <connection>scm:git:https://github.com/Twila-Digital/twila-parcelemais-java-sdk.git</connection>
+        <developerConnection>scm:git:https://github.com/Twila-Digital/twila-parcelemais-java-sdk.git</developerConnection>
+        <url>https://github.com/Twila-Digital/twila-parcelemais-java-sdk</url>
+    </scm>
+
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
@@ -107,6 +113,31 @@
             <id>release</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>flatten-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <configuration>
+                            <updatePomFile>true</updatePomFile>
+                            <flattenMode>oss</flattenMode>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>flatten</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>flatten</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>flatten.clean</id>
+                                <phase>clean</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
