@@ -1,0 +1,7 @@
+parcelemais:
+  client-id: ${PARCELEMAIS_CLIENT_ID:}
+  client-secret: ${PARCELEMAIS_CLIENT_SECRET:}
+  environment: ${PARCELEMAIS_ENVIRONMENT:STAGING}
+
+server:
+  port: 8080

@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  contract-tests:
+    needs: ci
+    uses: ./.github/workflows/contract-tests.yml
+
+  publish:
+    needs: [ci, contract-tests]
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          server-id: central
+          server-username: CENTRAL_TOKEN_USERNAME
+          server-password: CENTRAL_TOKEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+
+      - name: Extrai a versão da tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Define a versão do release
+        run: mvn -B versions:set -DnewVersion=${{ steps.version.outputs.version }} -DprocessAllModules=true -DgenerateBackupPoms=false
+
+      - name: Publica no Maven Central (Sonatype Central Portal)
+        run: mvn -B -pl parcelemais-sdk -am deploy -Prelease -DskipTests
+        env:
+          CENTRAL_TOKEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+          CENTRAL_TOKEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          generate_release_notes: true
