@@ -43,8 +43,6 @@ Gradle (Kotlin DSL):
 implementation("br.com.twila:parcelemais:1.0.0")
 ```
 
-> O pacote ainda não foi publicado no Maven Central — veja [CONTRIBUTING.md](CONTRIBUTING.md) para instalar a partir do código-fonte enquanto isso.
-
 ## Quick start
 
 ```java

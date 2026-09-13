@@ -40,7 +40,7 @@ Maven Central (via [Sonatype Central Portal](https://central.sonatype.com/)) **a
 
 Antes do primeiro release, alguém com acesso à conta/organização do Sonatype Central Portal precisa configurar:
 
-1. Criar o namespace `br.com.twila` no [Central Portal](https://central.sonatype.com/) — reverse-DNS do domínio `twila.com.br`, verificado via registro TXT no DNS desse domínio.
+1. ~~Criar o namespace `br.com.twila` no [Central Portal](https://central.sonatype.com/)~~ — já verificado via registro TXT no DNS de `twila.com.br`.
 2. Gerar um **User Token** (Account → Generate User Token) com permissão apenas de publish.
 3. Gerar (ou reaproveitar) uma chave GPG usada só para assinar releases deste SDK, e publicá-la num keyserver (`keys.openpgp.org` ou `keyserver.ubuntu.com`).
 4. No repositório do GitHub, criar o [environment](https://docs.github.com/actions/deployment/targeting-different-environments/using-environments-for-deployment) `production` (Settings → Environments) com **Required reviewers** configurado, e os secrets:
