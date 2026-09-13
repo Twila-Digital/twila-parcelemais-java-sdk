@@ -26,7 +26,7 @@ class WireContractTests {
     void endpointExistsInStagingSchema(String path) {
         var paths = OpenApiSchemaFixture.fetch().path("paths");
 
-        var matches = paths.properties().stream().anyMatch(entry -> entry.getKey().endsWith(normalize(path)));
+        var matches = paths.properties().stream().anyMatch(entry -> normalize(entry.getKey()).endsWith(normalize(path)));
 
         assertThat(matches)
                 .withFailMessage("Endpoint '%s' não encontrado no swagger.json de staging — o SDK e o backend divergiram.", path)
@@ -38,7 +38,7 @@ class WireContractTests {
         var schemas = OpenApiSchemaFixture.fetch().path("components").path("schemas");
 
         var orderSchema = schemas.properties().stream()
-                .filter(entry -> entry.getKey().toLowerCase().contains("orderresponse") || entry.getKey().toLowerCase().contains("pedidoresponse"))
+                .filter(entry -> simpleTypeName(entry.getKey()).equals("OrderIntegrationResponse"))
                 .map(java.util.Map.Entry::getValue)
                 .findFirst();
 
@@ -57,5 +57,10 @@ class WireContractTests {
 
     private static String normalize(String templatePath) {
         return templatePath.replaceAll("\\{[^}]+}", "");
+    }
+
+    private static String simpleTypeName(String schemaKey) {
+        var lastDot = schemaKey.lastIndexOf('.');
+        return lastDot >= 0 ? schemaKey.substring(lastDot + 1) : schemaKey;
     }
 }
