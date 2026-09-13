@@ -53,5 +53,6 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.java == '21'
         uses: codecov/codecov-action@v7
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           directory: parcelemais-sdk/target/site/jacoco
           fail_ci_if_error: false
