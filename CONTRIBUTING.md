@@ -48,7 +48,7 @@ Antes do primeiro release, alguém com acesso à conta/organização do Sonatype
    - `GPG_PRIVATE_KEY` — a chave privada exportada em ASCII-armor (`gpg --export-secret-keys --armor`).
    - `GPG_PASSPHRASE` — a senha da chave.
 
-Com isso configurado, `git push --tags` numa tag `v*` (ex.: `v1.0.0`) dispara build → contract tests → assinatura → publicação no Central Portal (como *deployment* pendente de release manual no painel, ou automático se `autoPublish` for habilitado depois que o processo estiver validado).
+Com isso configurado, `git push --tags` numa tag `v*` (ex.: `v1.0.0`) dispara build → contract tests → **pausa esperando aprovação manual do `environment` `production`** → assinatura → publicação automática no Central Portal (`autoPublish: true`) → GitHub Release. O gate de segurança fica na aprovação do `environment`, não na publicação em si.
 
 ## Reportando problemas
 
