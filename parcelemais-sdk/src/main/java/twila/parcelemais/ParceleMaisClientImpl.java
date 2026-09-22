@@ -12,6 +12,8 @@ import twila.parcelemais.orders.OrdersClient;
 import twila.parcelemais.orders.OrdersClientImpl;
 import twila.parcelemais.simulations.SimulationsClient;
 import twila.parcelemais.simulations.SimulationsClientImpl;
+import twila.parcelemais.establishments.EstablishmentsClient;
+import twila.parcelemais.establishments.EstablishmentsClientImpl;
 import twila.parcelemais.webhooks.WebhooksClient;
 import twila.parcelemais.webhooks.WebhooksClientImpl;
 import java.net.URI;
@@ -26,6 +28,7 @@ final class ParceleMaisClientImpl implements ParceleMaisClient {
     private final OrdersClient orders;
     private final SimulationsClient simulations;
     private final CustomersClient customers;
+    private final EstablishmentsClient establishments;
     private final WebhooksClient webhooks;
 
     ParceleMaisClientImpl(String clientId, String clientSecret, URI baseUrl, ParceleMaisResilienceOptions resilience) {
@@ -40,6 +43,7 @@ final class ParceleMaisClientImpl implements ParceleMaisClient {
         this.orders = new OrdersClientImpl(apiRequestExecutor, resilience);
         this.simulations = new SimulationsClientImpl(apiRequestExecutor);
         this.customers = new CustomersClientImpl(apiRequestExecutor);
+        this.establishments = new EstablishmentsClientImpl(apiRequestExecutor);
         this.webhooks = new WebhooksClientImpl(apiRequestExecutor);
     }
 
@@ -56,6 +60,11 @@ final class ParceleMaisClientImpl implements ParceleMaisClient {
     @Override
     public CustomersClient customers() {
         return customers;
+    }
+
+    @Override
+    public EstablishmentsClient establishments() {
+        return establishments;
     }
 
     @Override
