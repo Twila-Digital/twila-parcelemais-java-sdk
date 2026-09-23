@@ -248,8 +248,10 @@ class EstablishmentsClientWireMockTest {
         stubFor(get(urlEqualTo(url))
                 .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json").withBody("[]")));
 
-        client.establishments().list(ListEstablishmentsRequest.builder().isActive(false).build());
+        List<Establishment> establishments = client.establishments()
+                .list(ListEstablishmentsRequest.builder().isActive(false).build());
 
+        assertThat(establishments).isEmpty();
         server.verify(getRequestedFor(urlEqualTo(url)));
     }
 
