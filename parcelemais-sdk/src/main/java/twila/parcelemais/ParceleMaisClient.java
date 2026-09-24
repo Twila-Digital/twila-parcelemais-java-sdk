@@ -6,6 +6,7 @@ import twila.parcelemais.customers.CustomersClient;
 import twila.parcelemais.errors.ParceleMaisConfigurationException;
 import twila.parcelemais.orders.OrdersClient;
 import twila.parcelemais.simulations.SimulationsClient;
+import twila.parcelemais.establishments.EstablishmentsClient;
 import twila.parcelemais.webhooks.WebhooksClient;
 import java.net.URI;
 
@@ -16,6 +17,8 @@ public interface ParceleMaisClient extends AutoCloseable {
     SimulationsClient simulations();
 
     CustomersClient customers();
+
+    EstablishmentsClient establishments();
 
     WebhooksClient webhooks();
 
