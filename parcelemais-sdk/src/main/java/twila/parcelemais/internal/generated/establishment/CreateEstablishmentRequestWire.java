@@ -1,6 +1,7 @@
 package twila.parcelemais.internal.generated.establishment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 
 public final class CreateEstablishmentRequestWire {
 
@@ -39,6 +40,6 @@ public final class CreateEstablishmentRequestWire {
         this.modeloDesembolso = modeloDesembolso;
         this.responsavel = responsavel;
         this.contaBancaria = contaBancaria;
-        this.endereco = endereco;
+        this.endereco = Objects.requireNonNull(endereco, "endereco é obrigatório na criação do estabelecimento.");
     }
 }
