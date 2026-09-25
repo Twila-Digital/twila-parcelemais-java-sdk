@@ -1,6 +1,7 @@
 package twila.parcelemais.establishments.model;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Value;
 
 @Value
@@ -12,5 +13,6 @@ public class CreateEstablishmentRequest {
     DisbursementModel disbursementModel;
     EstablishmentOwner owner;
     EstablishmentBankAccount bankAccount;
+    @NonNull
     EstablishmentAddress address;
 }

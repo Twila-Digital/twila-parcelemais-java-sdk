@@ -21,6 +21,7 @@ class WireContractTests {
             "/v1/customer/{id}",
             "/v1/customer/paged",
             "/v1/webhooks",
+            "/v1/webhooks/auditoria",
             "/v1/webhooks/{type}"
     })
     void endpointExistsInStagingSchema(String path) {

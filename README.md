@@ -108,11 +108,12 @@ UUID pedidoId = client.orders().create(CreateOrderRequest.builder()
 | `client.orders()` | `create`, `get`, `list`, `startCdcSale`, `importInvoice` |
 | `client.simulations()` | `simulateInstallments`, `simulateValues` |
 | `client.customers()` | `get`, `list` |
-| `client.webhooks()` | `create`, `list`, `update`, `delete` |
+| `client.establishments()` | `create`, `get`, `list`, `update`, `updateBankAccount`, `activate`, `deactivate` |
+| `client.webhooks()` | `create`, `list`, `update`, `delete`, `listAudit` |
 
 ## Paginação
 
-`orders().list(...)` e `customers().list(...)` retornam `PagedResult<T>` — sem auto-paginação; você controla explicitamente o avanço de página:
+`orders().list(...)`, `customers().list(...)` e `webhooks().listAudit(...)` retornam `PagedResult<T>` — sem auto-paginação; você controla explicitamente o avanço de página:
 
 ```java
 PagedResult<Order> page = client.orders().list(ListOrdersRequest.builder().page(1).pageSize(20).build());

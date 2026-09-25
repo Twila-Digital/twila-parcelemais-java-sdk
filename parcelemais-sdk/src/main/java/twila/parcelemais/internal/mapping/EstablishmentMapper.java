@@ -28,7 +28,7 @@ public final class EstablishmentMapper {
                 request.getDisbursementModel().wireValue(),
                 toWire(request.getOwner()),
                 toWire(request.getBankAccount()),
-                toWire(request.getAddress()));
+                toAddressWire(request.getAddress()));
     }
 
     public static UpdateEstablishmentRequestWire toWire(UpdateEstablishmentRequest request) {
@@ -115,10 +115,10 @@ public final class EstablishmentMapper {
     }
 
     private static EstablishmentAddressWire toWire(EstablishmentAddress address) {
-        if (address == null) {
-            return null;
-        }
+        return address == null ? null : toAddressWire(address);
+    }
 
+    private static EstablishmentAddressWire toAddressWire(EstablishmentAddress address) {
         return new EstablishmentAddressWire(
                 address.getStreet(),
                 address.getNumber(),

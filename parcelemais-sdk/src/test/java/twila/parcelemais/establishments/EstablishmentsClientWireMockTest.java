@@ -91,6 +91,17 @@ class EstablishmentsClientWireMockTest {
                 + "}";
     }
 
+    private static EstablishmentAddress address() {
+        return EstablishmentAddress.builder()
+                .street("Rua Exemplo")
+                .number("100")
+                .district("Centro")
+                .city("Sao Paulo")
+                .state("SP")
+                .zipCode("01310100")
+                .build();
+    }
+
     private static CreateEstablishmentRequest createRequest(EstablishmentAddress address) {
         return CreateEstablishmentRequest.builder()
                 .document("12345678000199")
@@ -127,16 +138,7 @@ class EstablishmentsClientWireMockTest {
                 .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
                         .withBody("{\"estabelecimentoId\":\"" + establishmentId + "\"}")));
 
-        EstablishmentAddress address = EstablishmentAddress.builder()
-                .street("Rua Exemplo")
-                .number("100")
-                .district("Centro")
-                .city("Sao Paulo")
-                .state("SP")
-                .zipCode("01310100")
-                .build();
-
-        UUID created = client.establishments().create(createRequest(address));
+        UUID created = client.establishments().create(createRequest(address()));
 
         assertThat(created).isEqualTo(establishmentId);
 
@@ -146,21 +148,19 @@ class EstablishmentsClientWireMockTest {
         assertThat(body.get("modeloDesembolso").asInt()).isEqualTo(1);
         assertThat(body.get("responsavel").get("celular").asText()).isEqualTo("+5511999998888");
         assertThat(body.get("contaBancaria").get("tipoConta").asInt()).isEqualTo(1);
+        assertThat(body.get("endereco").get("rua").asText()).isEqualTo("Rua Exemplo");
+        assertThat(body.get("endereco").get("numero").asText()).isEqualTo("100");
+        assertThat(body.get("endereco").get("bairro").asText()).isEqualTo("Centro");
+        assertThat(body.get("endereco").get("cidade").asText()).isEqualTo("Sao Paulo");
+        assertThat(body.get("endereco").get("estado").asText()).isEqualTo("SP");
         assertThat(body.get("endereco").get("cep").asText()).isEqualTo("01310100");
     }
 
     @Test
-    void createWithoutAddressSendsNull() throws Exception {
-        UUID establishmentId = UUID.randomUUID();
-
-        stubFor(post(urlEqualTo("/integration/v1/establishment"))
-                .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
-                        .withBody("{\"estabelecimentoId\":\"" + establishmentId + "\"}")));
-
-        client.establishments().create(createRequest(null));
-
-        JsonNode body = lastBody(server.findAll(postRequestedFor(urlEqualTo("/integration/v1/establishment"))));
-        assertThat(body.get("endereco").isNull()).isTrue();
+    void createRequestWithoutAddressFailsOnBuild() {
+        assertThatThrownBy(() -> createRequest(null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessageContaining("address");
     }
 
     @Test
@@ -271,6 +271,20 @@ class EstablishmentsClientWireMockTest {
     }
 
     @Test
+    void updateSendsAddressWhenSet() throws Exception {
+        UUID establishmentId = UUID.randomUUID();
+        String url = "/integration/v1/establishment/" + establishmentId;
+
+        stubFor(put(urlEqualTo(url)).willReturn(aResponse().withStatus(200)));
+
+        client.establishments().update(establishmentId,
+                UpdateEstablishmentRequest.builder().tradeName("Loja Centro Matriz").address(address()).build());
+
+        JsonNode body = lastBody(server.findAll(putRequestedFor(urlEqualTo(url))));
+        assertThat(body.get("endereco").get("rua").asText()).isEqualTo("Rua Exemplo");
+    }
+
+    @Test
     void updateBankAccountUsesOwnEndpoint() throws Exception {
         UUID establishmentId = UUID.randomUUID();
         String url = "/integration/v1/establishment/" + establishmentId + "/bank-account";
@@ -312,7 +326,7 @@ class EstablishmentsClientWireMockTest {
                 .willReturn(aResponse().withStatus(409).withHeader("Content-Type", "application/json")
                         .withBody("{\"tipo\":\"Establishment.DocumentAlreadyAdded\",\"detalhe\":\"Documento ja cadastrado.\"}")));
 
-        assertThatThrownBy(() -> client.establishments().create(createRequest(null)))
+        assertThatThrownBy(() -> client.establishments().create(createRequest(address())))
                 .isInstanceOf(ParceleMaisApiException.class)
                 .satisfies(thrown -> assertThat(((ParceleMaisApiException) thrown).getStatusCode()).isEqualTo(409));
     }
