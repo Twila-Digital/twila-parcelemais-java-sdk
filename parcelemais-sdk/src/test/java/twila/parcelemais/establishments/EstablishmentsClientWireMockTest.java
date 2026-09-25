@@ -271,6 +271,20 @@ class EstablishmentsClientWireMockTest {
     }
 
     @Test
+    void updateSendsAddressWhenSet() throws Exception {
+        UUID establishmentId = UUID.randomUUID();
+        String url = "/integration/v1/establishment/" + establishmentId;
+
+        stubFor(put(urlEqualTo(url)).willReturn(aResponse().withStatus(200)));
+
+        client.establishments().update(establishmentId,
+                UpdateEstablishmentRequest.builder().tradeName("Loja Centro Matriz").address(address()).build());
+
+        JsonNode body = lastBody(server.findAll(putRequestedFor(urlEqualTo(url))));
+        assertThat(body.get("endereco").get("rua").asText()).isEqualTo("Rua Exemplo");
+    }
+
+    @Test
     void updateBankAccountUsesOwnEndpoint() throws Exception {
         UUID establishmentId = UUID.randomUUID();
         String url = "/integration/v1/establishment/" + establishmentId + "/bank-account";

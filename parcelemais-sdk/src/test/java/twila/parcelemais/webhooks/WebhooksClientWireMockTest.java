@@ -175,6 +175,16 @@ class WebhooksClientWireMockTest {
                 .satisfies(thrown -> assertThat(((ParceleMaisApiException) thrown).getStatusCode()).isEqualTo(404));
     }
 
+    @Test
+    void listAuditMalformedResponseThrowsIllegalStateException() {
+        stubFor(get(urlPathEqualTo(AUDIT_PATH))
+                .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+                        .withBody("{isto não é json")));
+
+        assertThatThrownBy(() -> client.webhooks().listAudit())
+                .isInstanceOf(IllegalStateException.class);
+    }
+
     private static String auditJson(UUID id, int type, int statusCode, String createdAt) {
         return "{"
                 + "\"id\":\"" + id + "\","
